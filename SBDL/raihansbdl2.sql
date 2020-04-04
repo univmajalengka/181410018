@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 21 Mar 2020 pada 13.32
+-- Waktu pembuatan: 04 Apr 2020 pada 13.52
 -- Versi server: 10.4.11-MariaDB
--- Versi PHP: 7.2.28
+-- Versi PHP: 7.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `program penjualan toko deras`
+-- Database: `program_penjualan`
 --
 
 -- --------------------------------------------------------
@@ -29,18 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tabel_barang` (
-  `kdbrg` varchar(50) NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `harga` varchar(50) NOT NULL,
-  `stok` varchar(50) NOT NULL
+  `kd_brg` varchar(50) NOT NULL,
+  `nama_brg` varchar(50) NOT NULL,
+  `jenis_brg` varchar(100) NOT NULL,
+  `harga_brg` varchar(50) NOT NULL,
+  `stok_brg` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tabel_barang`
 --
 
-INSERT INTO `tabel_barang` (`kdbrg`, `nama`, `harga`, `stok`) VALUES
-('B-0001', 'Oreo', '2000', '200');
+INSERT INTO `tabel_barang` (`kd_brg`, `nama_brg`, `jenis_brg`, `harga_brg`, `stok_brg`) VALUES
+('B-0001', 'Chocochip', 'Makanan', '2000', '300'),
+('B-0003', 'Chocolatos', 'Makanan', '500', '100');
 
 -- --------------------------------------------------------
 
@@ -50,38 +51,18 @@ INSERT INTO `tabel_barang` (`kdbrg`, `nama`, `harga`, `stok`) VALUES
 
 CREATE TABLE `tabel_beli` (
   `no_beli` varchar(10) NOT NULL,
-  `total` varchar(20) NOT NULL,
-  `kd_suplier` varchar(10) NOT NULL,
-  `tgl` date NOT NULL,
-  `idusr` varchar(10) NOT NULL
+  `nama_brg` varchar(200) NOT NULL,
+  `jumlah_beli` varchar(20) NOT NULL,
+  `tgl_beli` date NOT NULL,
+  `total_beli` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tabel_beli`
 --
 
-INSERT INTO `tabel_beli` (`no_beli`, `total`, `kd_suplier`, `tgl`, `idusr`) VALUES
-('P-0001', '15', 'S-101', '2020-03-09', 'U-01');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `tabel_detail`
---
-
-CREATE TABLE `tabel_detail` (
-  `notran` int(50) NOT NULL,
-  `kdbrg` varchar(50) NOT NULL,
-  `jml` int(50) NOT NULL,
-  `total` int(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `tabel_detail`
---
-
-INSERT INTO `tabel_detail` (`notran`, `kdbrg`, `jml`, `total`) VALUES
-(251, 'B-0001', 20, 40000);
+INSERT INTO `tabel_beli` (`no_beli`, `nama_brg`, `jumlah_beli`, `tgl_beli`, `total_beli`) VALUES
+('B-001', 'Chocolatos', '15', '2020-04-03', '30000');
 
 -- --------------------------------------------------------
 
@@ -90,18 +71,19 @@ INSERT INTO `tabel_detail` (`notran`, `kdbrg`, `jml`, `total`) VALUES
 --
 
 CREATE TABLE `tabel_jual` (
-  `notran` varchar(50) NOT NULL,
-  `idusr` varchar(50) NOT NULL,
-  `tgl` date NOT NULL,
-  `total` varchar(50) NOT NULL
+  `no_jual` varchar(50) NOT NULL,
+  `nama_brg` varchar(100) NOT NULL,
+  `jumlah_jual` varchar(100) NOT NULL,
+  `tgl_jual` date NOT NULL,
+  `total_jual` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tabel_jual`
 --
 
-INSERT INTO `tabel_jual` (`notran`, `idusr`, `tgl`, `total`) VALUES
-('251', 'U-01', '2020-03-09', '40000');
+INSERT INTO `tabel_jual` (`no_jual`, `nama_brg`, `jumlah_jual`, `tgl_jual`, `total_jual`) VALUES
+('J-232', 'Chocochip', '14', '2020-04-01', '40000');
 
 -- --------------------------------------------------------
 
@@ -110,17 +92,17 @@ INSERT INTO `tabel_jual` (`notran`, `idusr`, `tgl`, `total`) VALUES
 --
 
 CREATE TABLE `tabel_petugas` (
-  `idusr` varchar(5) NOT NULL,
-  `nama` varchar(20) NOT NULL,
-  `pass` varchar(8) NOT NULL
+  `id_user` varchar(15) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(140) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tabel_petugas`
 --
 
-INSERT INTO `tabel_petugas` (`idusr`, `nama`, `pass`) VALUES
-('U-01', 'Herman', '123456');
+INSERT INTO `tabel_petugas` (`id_user`, `username`, `password`) VALUES
+('u_123', 'raihan', 'daa6b8d04ce72d953d5501adc53ddd82');
 
 -- --------------------------------------------------------
 
@@ -130,17 +112,17 @@ INSERT INTO `tabel_petugas` (`idusr`, `nama`, `pass`) VALUES
 
 CREATE TABLE `tabel_suplier` (
   `kd_suplier` varchar(50) NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `alamat` varchar(50) NOT NULL,
-  `notelp` varchar(50) NOT NULL
+  `nama_sup` varchar(50) NOT NULL,
+  `alamat_sup` varchar(50) NOT NULL,
+  `notelp_sup` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tabel_suplier`
 --
 
-INSERT INTO `tabel_suplier` (`kd_suplier`, `nama`, `alamat`, `notelp`) VALUES
-('S-101', 'Oreo Co', 'Jakarta', '021234110');
+INSERT INTO `tabel_suplier` (`kd_suplier`, `nama_sup`, `alamat_sup`, `notelp_sup`) VALUES
+('S-0001', 'Oreo co', 'Jakarta', '02031231');
 
 --
 -- Indexes for dumped tables
@@ -150,7 +132,7 @@ INSERT INTO `tabel_suplier` (`kd_suplier`, `nama`, `alamat`, `notelp`) VALUES
 -- Indeks untuk tabel `tabel_barang`
 --
 ALTER TABLE `tabel_barang`
-  ADD PRIMARY KEY (`kdbrg`);
+  ADD PRIMARY KEY (`kd_brg`);
 
 --
 -- Indeks untuk tabel `tabel_beli`
@@ -159,24 +141,16 @@ ALTER TABLE `tabel_beli`
   ADD PRIMARY KEY (`no_beli`);
 
 --
--- Indeks untuk tabel `tabel_detail`
---
-ALTER TABLE `tabel_detail`
-  ADD PRIMARY KEY (`notran`),
-  ADD KEY `kdbrg` (`kdbrg`);
-
---
 -- Indeks untuk tabel `tabel_jual`
 --
 ALTER TABLE `tabel_jual`
-  ADD PRIMARY KEY (`notran`),
-  ADD KEY `idusr` (`idusr`);
+  ADD PRIMARY KEY (`no_jual`);
 
 --
 -- Indeks untuk tabel `tabel_petugas`
 --
 ALTER TABLE `tabel_petugas`
-  ADD PRIMARY KEY (`idusr`);
+  ADD PRIMARY KEY (`id_user`);
 
 --
 -- Indeks untuk tabel `tabel_suplier`
